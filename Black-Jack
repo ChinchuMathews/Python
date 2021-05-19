@@ -1,0 +1,86 @@
+from art import logo
+from clear_screen import clear
+import random
+print(logo)
+cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+
+def your_cards():
+	two_cards = []
+	i = 0
+	while i < 2:
+		two_cards.append(random.choice(cards))
+		i += 1
+	return two_cards
+
+def who_wins(user_total, computer_total):
+	
+	if user_total == 21 and not computer_total == user_total:
+		return "BLACK-JACK and You Wins!!"
+	elif user_total > 21:
+		return "You went over and You Loose :("
+	elif computer_total > 21:
+		return "Computer went over and you wins!"
+	elif user_total > computer_total and user_total <= 21:
+		return "You wins!!"
+	elif user_total == computer_total:
+		return "It's a Draw "
+	else:
+		return "You Loose :("
+
+def next_card(user_out):
+	user_out.append(random.choice(cards))
+	return user_out
+
+def if_ace(total):
+	if total + 11 > 21:
+		return user_total + 1
+	return total + 11
+
+
+play_game = True
+while play_game:
+	choice = input("\nDo you want to play a game of Blackjack? Type 'y'  or 'n'. ")
+	if choice == 'y':
+		clear()
+		user_total = 0
+		computer_total = 0
+		user_out = your_cards()
+		computer_out = your_cards()
+		
+		
+		user_total = sum(user_out)
+		print(f"Your cards: {user_out}. Current score: {user_total}.")
+		print(f"computer's first card: {computer_out[0]}.")
+		
+		if user_total < 21:
+			ans = input("Type 'y' to get another card, type 'n' to pass: ")
+			if ans == 'y':
+				user_out = next_card(user_out)
+		
+		if 11 in user_out:
+			user_total = if_ace(user_total)
+
+		user_total = 0
+		user_total = sum(user_out)
+
+		computer_total = sum(computer_out)
+		if computer_total < 14:
+			computer_out.append(random.choice(cards))
+		
+		computer_total = 0
+		computer_total = sum(computer_out)
+
+		print(f"Your final hand: {user_out}. Final score: {user_total}.")
+		print(f"computer's final hand: {computer_out}, final score: {computer_total}")
+
+		winner = who_wins(user_total,computer_total)
+
+		print(winner)
+
+	
+	elif choice == 'n':
+		play_game = False
+		clear()
+	else:
+		print("Invalid choice.\n")
+
